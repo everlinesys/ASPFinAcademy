@@ -79,10 +79,17 @@ export default function EditCourse() {
         { title: file.name }
       );
 
-      const { videoId, uploadUrl } = data;
+      const { videoId, uploadUrl, accessKey } = data; // 👈 include accessKey
 
       const xhr = new XMLHttpRequest();
       xhr.open("PUT", uploadUrl);
+
+      // ✅ REQUIRED HEADERS (missing before)
+      xhr.setRequestHeader("AccessKey", accessKey);
+      xhr.setRequestHeader(
+        "Content-Type",
+        file.type || "application/octet-stream"
+      );
 
       xhr.upload.onprogress = (e) => {
         if (e.lengthComputable) {
@@ -91,12 +98,23 @@ export default function EditCourse() {
       };
 
       xhr.onload = () => {
-        setUploading(false);
+        if (xhr.status >= 200 && xhr.status < 300) {
+          setForm((p) => ({
+            ...p,
+            introBunnyVideoId: videoId,
+          }));
+        } else {
+          console.error("Upload failed:", xhr.responseText);
+          alert("Upload failed");
+        }
 
-        setForm((p) => ({
-          ...p,
-          introBunnyVideoId: videoId,
-        }));
+        setUploading(false);
+      };
+
+      xhr.onerror = () => {
+        console.error("Upload error");
+        alert("Upload error");
+        setUploading(false);
       };
 
       xhr.send(file);

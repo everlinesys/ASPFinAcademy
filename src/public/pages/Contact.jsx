@@ -1,8 +1,9 @@
-import branding from "../../config/branding.json";
+import { useBranding } from "../../shared/hooks/useBranding";
 
 export default function Contact() {
+  const branding = useBranding();
   return (
-    <div className="mx-auto px-6 py-16 space-y-10 text-black">
+    <div className="mx-auto px-6 py-16 space-y-10 text-black bg-white">
 
       <div>
         <h1 className="text-3xl font-bold mb-2">
@@ -21,25 +22,25 @@ export default function Contact() {
 
           <p>
             <span className="font-medium">Email:</span>{" "}
-            {branding.email}
+            {branding.contact.email}
           </p>
 
           <p>
             <span className="font-medium">Phone:</span>{" "}
-            {branding.phone}
+            {branding.contact.phone}
           </p>
 
           <p>
             <span className="font-medium">Address:</span>{" "}
-            {branding.address}
+            {branding.contact.address}
           </p>
 
           <a
-            href={branding.whatsapp}
+            href={branding.contact.whatsapp}
             target="_blank"
             rel="noreferrer"
             className="inline-block mt-3 px-4 py-2 bg-green-600 text-white rounded-lg text-sm"
-          >
+            style={{ color: "white" }}  >
             Chat on WhatsApp
           </a>
         </div>
